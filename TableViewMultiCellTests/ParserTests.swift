@@ -11,7 +11,6 @@ import XCTest
 class ParserTests: XCTestCase {
 
     let sut: Parser = JsonParser()
-    let data: [String] = []
 
     func testParserWithStrings() throws {
         let expectation = XCTestExpectation(description: "Test parse strings")
