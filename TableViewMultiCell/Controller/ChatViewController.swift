@@ -28,8 +28,6 @@ class ChatViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        
         model.fetchInfo() { [weak self] messages in
             self?.messages = messages
         }
@@ -49,19 +47,17 @@ extension ChatViewController: UITableViewDataSource {
         let message = messages[indexPath.row]
         
         let cellType = CellType.init(userName: message.user)
-        let cell: UITableViewCell?
+        var cell: UITableViewCell?
         
         switch cellType {
         case .received:
-            let receiverCell: ReceiverCell? = tableView.dequeueCell(for: indexPath)
+            cell = tableView.dequeueCell(for: indexPath, for: ReceiverCell.self)
             let viewModel = ReceivedMessageViewModel(item: message)
-            receiverCell?.configure(using: viewModel)
-            cell = receiverCell
+            (cell as? ReceiverCell)?.configure(using: viewModel)
         default:
-            let senderCell: SenderCell? = tableView.dequeueCell(for: indexPath)
+            cell = tableView.dequeueCell(for: indexPath, for: SenderCell.self)
             let viewModel = SentMessageViewModel(item: message)
-            senderCell?.configure(using: viewModel)
-            cell = senderCell
+            (cell as? SenderCell)?.configure(using: viewModel)
         }
         
         return cell ?? UITableViewCell()

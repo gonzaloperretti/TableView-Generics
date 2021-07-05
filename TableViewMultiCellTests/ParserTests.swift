@@ -37,4 +37,14 @@ class ParserTests: XCTestCase {
         
         wait(for: [expectation], timeout: 5)
     }
+    
+    func testParseMissingFile() throws {
+        let expectation = XCTestExpectation(description: "Test parse strings")
+        sut.parseFile(fileName: "testMissingFile", bundle: Bundle(for: Self.self), type: [String].self) { result in
+            XCTAssertNil(result)
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 5)
+    }
 }

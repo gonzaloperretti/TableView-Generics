@@ -13,6 +13,7 @@
 		B341D8B0268FD72E00291E6A /* test2.json in Resources */ = {isa = PBXBuildFile; fileRef = B341D8AF268FD72E00291E6A /* test2.json */; };
 		B341D8B2268FE53000291E6A /* TableViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B341D8B1268FE53000291E6A /* TableViewTests.swift */; };
 		B341D8B5268FE5CA00291E6A /* ChatItem+Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B341D8B4268FE5CA00291E6A /* ChatItem+Mock.swift */; };
+		B341D8BE269380D700291E6A /* UITableViewCellExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B341D8B92693719A00291E6A /* UITableViewCellExtensionTests.swift */; };
 		B394464E268E7162001A83A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B394464D268E7162001A83A2 /* AppDelegate.swift */; };
 		B3944650268E7162001A83A2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B394464F268E7162001A83A2 /* SceneDelegate.swift */; };
 		B3944652268E7162001A83A2 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3944651268E7162001A83A2 /* ChatViewController.swift */; };
@@ -56,6 +57,7 @@
 		B341D8AF268FD72E00291E6A /* test2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test2.json; sourceTree = "<group>"; };
 		B341D8B1268FE53000291E6A /* TableViewTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewTests.swift; sourceTree = "<group>"; };
 		B341D8B4268FE5CA00291E6A /* ChatItem+Mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatItem+Mock.swift"; sourceTree = "<group>"; };
+		B341D8B92693719A00291E6A /* UITableViewCellExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewCellExtensionTests.swift; sourceTree = "<group>"; };
 		B394464A268E7162001A83A2 /* TableViewMultiCell.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TableViewMultiCell.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B394464D268E7162001A83A2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B394464F268E7162001A83A2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -132,6 +134,14 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		B341D8B82693716F00291E6A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B341D8B92693719A00291E6A /* UITableViewCellExtensionTests.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		B3944641268E7162001A83A2 = {
 			isa = PBXGroup;
 			children = (
@@ -172,6 +182,7 @@
 		B3944663268E7165001A83A2 /* TableViewMultiCellTests */ = {
 			isa = PBXGroup;
 			children = (
+				B341D8B82693716F00291E6A /* View */,
 				B341D8B3268FE59100291E6A /* Model */,
 				B341D8AC268FD6F100291E6A /* Data */,
 				B3944664268E7166001A83A2 /* ParserTests.swift */,
@@ -401,6 +412,7 @@
 				B3944665268E7166001A83A2 /* ParserTests.swift in Sources */,
 				B341D8B5268FE5CA00291E6A /* ChatItem+Mock.swift in Sources */,
 				B341D8B2268FE53000291E6A /* TableViewTests.swift in Sources */,
+				B341D8BE269380D700291E6A /* UITableViewCellExtensionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

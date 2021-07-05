@@ -23,11 +23,7 @@ class ModelManager: Model {
     func fetchInfo(completion: CompletionHandler) {
         
         jsonParser.parseFile(fileName: "messages", bundle: .main, type: [ChatItem].self) { result in
-            guard let result = result else {
-                completion([])
-                return
-            }
-            completion(result)
+            completion(result ?? [])
         }
     }
     

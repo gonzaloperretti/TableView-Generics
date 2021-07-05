@@ -20,7 +20,6 @@ class JsonParser: Parser {
             return
         }
         
-        print(objects)
         return completion(objects)
     }
     
@@ -28,11 +27,6 @@ class JsonParser: Parser {
         guard let filepath = bundle.path(forResource: fileName, ofType: "json") else {
             return nil
         }
-        do {
-            return try Data(contentsOf: URL(fileURLWithPath: filepath), options: .mappedIfSafe)
-        } catch let error {
-            print("Error reading file: \(fileName) -> \(error)")
-            return nil
-        }
+        return try? Data(contentsOf: URL(fileURLWithPath: filepath), options: .mappedIfSafe)
     }
 }
