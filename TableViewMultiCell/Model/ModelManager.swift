@@ -21,8 +21,7 @@ class ModelManager: Model {
     }
     
     func fetchInfo(completion: CompletionHandler) {
-        
-        jsonParser.parseFile(fileName: "messages", bundle: .main, type: [ChatItem].self) { result in
+        try? jsonParser.parseFile(fileName: "messages", bundle: .main, type: [ChatItem].self) { result in
             completion(result ?? [])
         }
     }

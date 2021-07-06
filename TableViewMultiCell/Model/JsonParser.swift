@@ -7,19 +7,25 @@
 
 import Foundation
 
+enum ParsingError: Error {
+    case FileError
+    case DecodingError
+}
+
 protocol Parser {
-    func parseFile<T: Codable>(fileName: String, bundle: Bundle, type: T.Type, completion: ((T?) -> Void))
+    func parseFile<T: Codable>(fileName: String, bundle: Bundle, type: T.Type, completion: ((T?) -> Void)) throws
 }
 
 class JsonParser: Parser {
-    func parseFile<T: Codable>(fileName: String, bundle: Bundle, type: T.Type, completion: ((T?) -> Void)) {
-        guard let data = readJsonFile(fileName: fileName, bundle: bundle),
-              let objects = try? JSONDecoder().decode(T.self, from: data) else {
+    func parseFile<T: Codable>(fileName: String, bundle: Bundle, type: T.Type, completion: ((T?) -> Void)) throws {
+        guard let data = readJsonFile(fileName: fileName, bundle: bundle) else {
             print("Error decoding file using type: \(T.self)")
-            completion(nil)
-            return
+            throw ParsingError.FileError
         }
-        
+        guard let objects = try? JSONDecoder().decode(T.self, from: data) else {
+            print("Error decoding file using type: \(T.self)")
+            throw ParsingError.DecodingError
+        }
         return completion(objects)
     }
     
