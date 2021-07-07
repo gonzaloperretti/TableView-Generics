@@ -7,12 +7,7 @@
 
 import Foundation
 
-protocol SentMessage: ViewModel {
-    var text: String { get }
-    var time: String { get }
-}
-
-struct SentMessageViewModel: SentMessage {
+class SentMessageViewModel: ViewModel {
     var text: String
     var time: String
     

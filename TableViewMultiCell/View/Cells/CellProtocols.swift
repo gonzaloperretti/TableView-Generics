@@ -7,9 +7,4 @@
 
 import Foundation
 
-protocol LoadCell {
-    associatedtype T
-    func configure(using viewModel: T)
-}
-
-protocol ViewModel { }
+@objc protocol ViewModel { }

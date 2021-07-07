@@ -6,14 +6,8 @@
 //
 
 import Foundation
-
-protocol ReceivedMessage: ViewModel {
-    var name: String { get }
-    var text: String { get }
-    var time: String { get }
-}
     
-struct ReceivedMessageViewModel: ReceivedMessage {
+class ReceivedMessageViewModel: ViewModel {
     var name: String
     var text: String
     var time: String

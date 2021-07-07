@@ -17,3 +17,11 @@ extension ReusableCell {
         return String(describing: self)
     }
 }
+
+protocol CellConfigurable {
+    func configure(viewModel: ViewModel)
+}
+
+extension UITableViewCell: CellConfigurable {
+    @objc func configure(viewModel: ViewModel) { }
+}

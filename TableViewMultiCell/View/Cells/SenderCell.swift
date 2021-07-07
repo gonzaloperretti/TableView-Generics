@@ -11,12 +11,11 @@ import UIKit
 class SenderCell: UITableViewCell, ReusableCell {
     @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
-}
-
-extension SenderCell: LoadCell {
-    typealias T = SentMessage
-    func configure(using viewModel: SentMessage) {
-        messageLabel.text = viewModel.text
-        timeLabel.text = viewModel.time
+    
+    override func configure(viewModel: ViewModel) {
+        super.configure(viewModel: viewModel)
+        let senderViewModel = viewModel as? SentMessageViewModel
+        messageLabel.text = senderViewModel?.text
+        timeLabel.text = senderViewModel?.time
     }
 }

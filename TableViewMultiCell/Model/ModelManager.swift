@@ -7,22 +7,27 @@
 
 import Foundation
 
-typealias CompletionHandler = ([ChatItem]) -> Void
-
 protocol Model {
-    func fetchInfo(completion: CompletionHandler)
+    func fetchInfo<T: Codable>(type: T.Type, completion: (Result<T, ParsingError>) -> Void)
 }
 
 class ModelManager: Model {
     let jsonParser: Parser
     
-    init(parser: Parser = JsonParser()) {
+    init(parser: Parser = JsonParser(dataCollector: LocalDataCollector(
+                                        fileName: "messages",
+                                        bundle: Bundle.main))) {
         jsonParser = parser
     }
     
-    func fetchInfo(completion: CompletionHandler) {
-        try? jsonParser.parseFile(fileName: "messages", bundle: .main, type: [ChatItem].self) { result in
-            completion(result ?? [])
+    func fetchInfo<T: Codable>(type: T.Type, completion: (Result<T, ParsingError>) -> Void) {
+        jsonParser.parseFile(type: T.self) { result in
+            switch result {
+            case .success(let objects):
+                completion(.success(objects))
+            case .failure(let error):
+                completion(.failure(.DecodingError(error)))
+            }
         }
     }
     

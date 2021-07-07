@@ -23,6 +23,7 @@ class TableViewTests: XCTestCase {
     func testTableViewInfo() throws {
         XCTAssertNotNil(sut?.tableView)
         sut?.messages = ChatItem.mockData()
+        
         XCTAssertEqual(sut?.tableView.numberOfRows(inSection: 0), 5)
         
         let senderCell = sut?.tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? SenderCell
@@ -34,9 +35,6 @@ class TableViewTests: XCTestCase {
         XCTAssertEqual(receiverCell?.messageLabel.text, sut?.messages[2].message)
         XCTAssertEqual(receiverCell?.timeLabel.text, sut?.messages[2].time)
 
-        let cell = sut?.tableView.cellForRow(at: IndexPath(row: 4, section: 0))
-        XCTAssertTrue(cell!.isKind(of: UITableViewCell.self))
-        XCTAssertFalse(cell!.isKind(of: SenderCell.self))
-        XCTAssertTrue(cell!.isKind(of: ReceiverCell.self))
+        XCTAssertNil(sut?.tableView.cellForRow(at: IndexPath(row: 8, section: 0)))
     }
 }

@@ -13,7 +13,7 @@ class ChatViewController: UIViewController {
         case received
         case sent
         init(userName: String) {
-            self = userName == "Me" ? .sent : .received
+            self = userName == "Me" ? .received : .sent
         }
     }
     
@@ -28,8 +28,13 @@ class ChatViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        model.fetchInfo() { [weak self] messages in
-            self?.messages = messages
+        model.fetchInfo(type: [ChatItem].self) { [weak self] result in
+            switch result {
+            case .success(let items):
+                self?.messages = items
+            case .failure(let error):
+                print(error)
+            }
         }
     }
 }
@@ -46,20 +51,20 @@ extension ChatViewController: UITableViewDataSource {
         }
         let message = messages[indexPath.row]
         
+        var cellIdentifier: String
+        var viewModel: ViewModel
         let cellType = CellType.init(userName: message.user)
-        var cell: UITableViewCell?
         
         switch cellType {
         case .received:
-            cell = tableView.dequeueCell(for: indexPath, for: ReceiverCell.self)
-            let viewModel = ReceivedMessageViewModel(item: message)
-            (cell as? ReceiverCell)?.configure(using: viewModel)
+            cellIdentifier = SenderCell.reusableIdentifier
+            viewModel = SentMessageViewModel(item: message)
         default:
-            cell = tableView.dequeueCell(for: indexPath, for: SenderCell.self)
-            let viewModel = SentMessageViewModel(item: message)
-            (cell as? SenderCell)?.configure(using: viewModel)
+            cellIdentifier = ReceiverCell.reusableIdentifier
+            viewModel = ReceivedMessageViewModel(item: message)
         }
-        
-        return cell ?? UITableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
+        cell.configure(viewModel: viewModel)
+        return cell
     }
 }

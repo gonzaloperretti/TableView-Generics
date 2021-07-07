@@ -12,14 +12,12 @@ class ReceiverCell: UITableViewCell, ReusableCell {
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
-}
-
-
-extension ReceiverCell: LoadCell {
-    typealias T = ReceivedMessage
-    func configure(using viewModel: ReceivedMessage) {
-        userNameLabel.text = viewModel.name
-        messageLabel.text = viewModel.text
-        timeLabel.text = viewModel.time
+    
+    override func configure(viewModel: ViewModel) {
+        super.configure(viewModel: viewModel)
+        let receiverViewModel = viewModel as? ReceivedMessageViewModel
+        userNameLabel.text = receiverViewModel?.name
+        messageLabel.text = receiverViewModel?.text
+        timeLabel.text = receiverViewModel?.time
     }
 }

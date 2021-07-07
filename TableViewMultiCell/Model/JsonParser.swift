@@ -7,32 +7,47 @@
 
 import Foundation
 
-enum ParsingError: Error {
-    case FileError
-    case DecodingError
+enum ParsingError: Error, Equatable {
+    case DataError(Error)
+    case DecodingError(Error)
+    case SourceNotFound
+    
+    static func == (lhs: ParsingError, rhs: ParsingError) -> Bool {
+        switch (lhs, rhs) {
+        case (.DataError, .DataError), (.DecodingError, .DecodingError), (SourceNotFound, SourceNotFound):
+            return true
+        default:
+            return false
+        }
+    }
+    
 }
 
 protocol Parser {
-    func parseFile<T: Codable>(fileName: String, bundle: Bundle, type: T.Type, completion: ((T?) -> Void)) throws
+    func parseFile<T: Codable>(type: T.Type, completion: (Result<T, ParsingError>) -> Void)
 }
 
 class JsonParser: Parser {
-    func parseFile<T: Codable>(fileName: String, bundle: Bundle, type: T.Type, completion: ((T?) -> Void)) throws {
-        guard let data = readJsonFile(fileName: fileName, bundle: bundle) else {
-            print("Error decoding file using type: \(T.self)")
-            throw ParsingError.FileError
-        }
-        guard let objects = try? JSONDecoder().decode(T.self, from: data) else {
-            print("Error decoding file using type: \(T.self)")
-            throw ParsingError.DecodingError
-        }
-        return completion(objects)
+    let dataCollector: DataCollector
+    
+    init(dataCollector: DataCollector) {
+        self.dataCollector = dataCollector
     }
     
-    private func readJsonFile(fileName: String, bundle: Bundle) -> Data? {
-        guard let filepath = bundle.path(forResource: fileName, ofType: "json") else {
-            return nil
+    func parseFile<T: Codable>(type: T.Type, completion: (Result<T, ParsingError>) -> Void) {
+        dataCollector.getData() { result in
+            switch result {
+            case .success(let data):
+                do {
+                    let objects = try JSONDecoder().decode(T.self, from: data)
+                    completion(.success(objects))
+                } catch {
+                    completion(.failure(ParsingError.DecodingError(error)))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+            
         }
-        return try? Data(contentsOf: URL(fileURLWithPath: filepath), options: .mappedIfSafe)
     }
 }
