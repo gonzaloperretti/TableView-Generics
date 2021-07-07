@@ -24,7 +24,7 @@ enum ParsingError: Error, Equatable {
 }
 
 protocol Parser {
-    func parseFile<T: Codable>(type: T.Type, completion: (Result<T, ParsingError>) -> Void)
+    func parse<T: Codable>(type: T.Type, completion: (Result<T, ParsingError>) -> Void)
 }
 
 class JsonParser: Parser {
@@ -34,7 +34,7 @@ class JsonParser: Parser {
         self.dataCollector = dataCollector
     }
     
-    func parseFile<T: Codable>(type: T.Type, completion: (Result<T, ParsingError>) -> Void) {
+    func parse<T: Codable>(type: T.Type, completion: (Result<T, ParsingError>) -> Void) {
         dataCollector.getData() { result in
             switch result {
             case .success(let data):
@@ -42,6 +42,7 @@ class JsonParser: Parser {
                     let objects = try JSONDecoder().decode(T.self, from: data)
                     completion(.success(objects))
                 } catch {
+                    print(error)
                     completion(.failure(ParsingError.DecodingError(error)))
                 }
             case .failure(let error):

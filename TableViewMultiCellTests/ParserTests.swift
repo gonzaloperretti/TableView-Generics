@@ -15,7 +15,7 @@ class ParserTests: XCTestCase {
     func testParserWithStrings() throws {
         sut = JsonParser(dataCollector: LocalDataCollector(fileName: "test", bundle: Bundle(for: Self.self)))
         let expectation = XCTestExpectation(description: "Test parse strings")
-        sut.parseFile(type: [String].self) { result in
+        sut.parse(type: [String].self) { result in
             switch result {
             case .success(let objects):
                 XCTAssertNotNil(objects)
@@ -32,7 +32,7 @@ class ParserTests: XCTestCase {
     func testParserWithChatItem() throws {
         sut = JsonParser(dataCollector: LocalDataCollector(fileName: "test2", bundle: Bundle(for: Self.self)))
         let expectation = XCTestExpectation(description: "Test parse ChatItem")
-        sut.parseFile(type: [ChatItem].self) { result in
+        sut.parse(type: [ChatItem].self) { result in
             switch result {
             case .success(let objects):
                 XCTAssertNotNil(objects)
@@ -52,7 +52,7 @@ class ParserTests: XCTestCase {
     func testParseMissingFile() throws {
         sut = JsonParser(dataCollector: LocalDataCollector(fileName: "testMissingFile", bundle: Bundle(for: Self.self)))
         let expectation = XCTestExpectation(description: "File not found")
-        sut.parseFile(type: [String].self) { result in
+        sut.parse(type: [String].self) { result in
             switch result {
             case .success:
                 XCTFail("Failed")
@@ -64,36 +64,49 @@ class ParserTests: XCTestCase {
             wait(for: [expectation], timeout: 5)
         }
     }
-//
-//        func testParseInvalidFile() throws {
-//            let expectation = XCTestExpectation(description: "Error decoding")
-//            do {
-//                try sut.parseFile(fileName: "wrongFile", bundle: Bundle(for: Self.self), type: [String].self) { result in
-//                    XCTFail("Failed")
-//                    expectation.fulfill()
-//                }
-//            } catch let error {
-//                XCTAssertEqual(error as? ParsingError, ParsingError.DecodingError)
-//                expectation.fulfill()
-//            }
-//
-//            wait(for: [expectation], timeout: 5)
-//        }
-//
-//        func testParseEmptyFile() throws {
-//            let expectation = XCTestExpectation(description: "Empty file")
-//            do {
-//                try sut.parseFile(fileName: "emptyFile", bundle: Bundle(for: Self.self), type: [String].self) { result in
-//                    XCTAssertEqual(result, [])
-//                    expectation.fulfill()
-//                }
-//            } catch {
-//                XCTFail("Failed")
-//                expectation.fulfill()
-//            }
-//
-//            wait(for: [expectation], timeout: 5)
-//        }
-//
-//     }
+    
+    
+    func testCustomSuccessDataCollector() throws {
+        sut = JsonParser(dataCollector: CustomSuccessDataCollector())
+        let expectation = XCTestExpectation(description: "Custom Success Data Collector")
+        sut.parse(type: [String].self) { result in
+            switch result {
+            case .success(let data):
+                XCTAssertEqual(data[0], "Test Data")
+                expectation.fulfill()
+            case .failure:
+                XCTFail("Failed")
+            }
+            
+            wait(for: [expectation], timeout: 5)
+        }
+    }
+    
+    func testCustomFailDataCollector() throws {
+        sut = JsonParser(dataCollector: CustomFailDataCollector())
+        let expectation = XCTestExpectation(description: "Custom Fail Data Collector")
+        sut.parse(type: [String].self) { result in
+            switch result {
+            case .success:
+                XCTFail("Failed")
+            case .failure(let error):
+                XCTAssertEqual(error, ParsingError.DataError(NSError()))
+                expectation.fulfill()
+            }
+            
+            wait(for: [expectation], timeout: 5)
+        }
+    }
+}
+
+class CustomSuccessDataCollector: DataCollector {
+    func getData(completion: (Result<Data, ParsingError>) -> Void) {
+        completion(.success(Data("[\"Test Data\"]".utf8)))
+    }
+}
+
+class CustomFailDataCollector: DataCollector {
+    func getData(completion: (Result<Data, ParsingError>) -> Void) {
+        completion(.failure(.DataError(NSError())))
+    }
 }

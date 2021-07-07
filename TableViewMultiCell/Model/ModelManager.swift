@@ -21,7 +21,7 @@ class ModelManager: Model {
     }
     
     func fetchInfo<T: Codable>(type: T.Type, completion: (Result<T, ParsingError>) -> Void) {
-        jsonParser.parseFile(type: T.self) { result in
+        jsonParser.parse(type: T.self) { result in
             switch result {
             case .success(let objects):
                 completion(.success(objects))
